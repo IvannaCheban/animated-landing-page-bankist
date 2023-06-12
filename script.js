@@ -47,6 +47,37 @@ document
   });
 message.style.height =
   Number.parseFloat(getComputedStyle(message).height, 10) + 30 + "px";
+message.style.backgroundColor = "#37383d";
+message.style.width = "120%";
+//Implementing smooth scroling
+//old way
+const btnScrollTo = document.querySelector(".btn--scroll-to");
+const section1 = document.querySelector("#section--1");
+
+btnScrollTo.addEventListener("click", function (e) {
+  const s1Coords = section1.getBoundingClientRect(); //getting the coordinates of the part that we need to scroll to
+  console.log(s1Coords);
+  console.log(e.target.getBoundingClientRect()); //when we scroll these coordinates change// this position is relative to the view port
+  console.log("Current sroll (X/Y):", window.pageXOffset, window.pageYOffset); //when we at the top its 0 / 0, Y changes when we scroll down, it increases the further you scroll
+  console.log(
+    "height / witdh viewport",
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  ); //accesing the witdh and  height of the clients viewport
+  // scrolling
+  // window.scrollTo(
+  //   s1Coords.left + window.pageXOffset, //determined position of the element relevant to the document
+  //   s1Coords.top + window.pageYOffset
+  // ); // the left goes first, and then the top -  //traveling to section 1 coordinates on click by reading left and top properties from getBoundingClientRect(); method and also we need to add the part that we dont see with window.pageZoffset to get to the postion when we are not exactly on the top of the screen(current position + current scroll)
+  // window.scrollTo({
+  //   // to make scrolling smooth we need to specify the object left, top and behavior properties
+  //   left: s1Coords.left + window.pageXOffset,
+  //   top: s1Coords.top + window.pageYOffset,
+  //   behavior: "smooth",
+  // });
+  //MODERN way
+  section1.scrollIntoView({ behavior: "smooth" }); // does't work with older browsers
+});
 
 //How the DOM is really works
 
