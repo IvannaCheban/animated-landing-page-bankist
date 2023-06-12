@@ -45,6 +45,8 @@ document
   .addEventListener("click", function () {
     message.remove(message);
   });
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + "px";
 
 //How the DOM is really works
 
@@ -124,3 +126,57 @@ document
 //     message.remove(message);
 //     // message.parentElement.removeChild(message);//before remove method was introduced
 //   });
+//
+/*
+//STYLES, atributes and classes
+//
+//styles
+message.style.backgroundColor = "#37383d";
+message.style.width = "120%";
+console.log(message.style.color); //reading the properties inline only possible if we set them manualy inline
+console.log(message.style.backgroundColor);
+
+console.log(getComputedStyle(message).color); //reading the properties of an ellement
+console.log(getComputedStyle(message).height); // even if we did not set the property ourselves, browser did it so we still have acces to it
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + "px"; //here we can add getcomputedstyle height and extra height that we would like to, just need to concider that the value we  is a sting, so we need to convert that
+
+//Custom proberties (CSS variables)
+document.documentElement.style.setProperty("--color-primary", "orangered"); //first selecting the property that we want to change, and second specifying the what we want to change it too
+
+//Atributes (class, id)
+const logo = document.querySelector(".nav__logo");
+console.log(logo.alt); //this works because images should have those atributes
+console.log(logo.src); //if we specify it in html than the Js will automaticaly create these properties on the object
+console.log(logo.className); //nav__logo
+
+logo.alt = "Beautiful minimalist logo"; // setting alt atributes
+
+// non-standart
+console.log(logo.designer); //undefined because its not a standart property
+console.log(logo.getAttribute("designer")); // a bit different but it works
+logo.setAttribute("company", "Bankist");
+console.log(logo.getAttribute("company"));
+
+console.log(logo.src); //absolute
+console.log(logo.getAttribute("src")); // relative(to html)
+
+const link = document.querySelector(".nav__link--btn");
+console.log(link.href); // absolute
+console.log(link.getAttribute("href")); // relative to html
+
+//Data atributes
+console.log(logo.dataset.versionNumber); // these specioal atributes, with data in the name, are always stored in dataset object
+//In JavaScript, a dataset typically refers to a collection of structured data that can be used for various purposes, such as analysis, manipulation, or visualization. It can be represented in different formats, such as arrays, objects, or JSON (JavaScript Object Notation).
+//You can perform various operations on the dataset, such as filtering based on specific criteria, sorting, mapping to extract specific properties, or aggregating data using reduce functions.
+
+//Classes
+logo.classList.add("c", "j");
+logo.classList.remove("c", "j");
+logo.classList.toggle("c");
+logo.classList.contains("c"); //not includes
+
+//set class
+//Dont use
+// logo.className = "jonas"; // overwrigth all there is and allow only 1 className,
+*/
