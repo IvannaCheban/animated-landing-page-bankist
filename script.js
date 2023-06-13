@@ -50,6 +50,15 @@ message.style.height =
 message.style.backgroundColor = "#37383d";
 message.style.width = "120%";
 //Implementing smooth scroling
+const btnScrollTo = document.querySelector(".btn--scroll-to");
+const section1 = document.querySelector("#section--1");
+btnScrollTo.addEventListener("click", function () {
+  const s1Coord = section1.getBoundingClientRect();
+  section1.scrollIntoView({ behavior: "smooth" });
+});
+
+/*
+//Implementing smooth scroling theory
 //old way
 const btnScrollTo = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
@@ -78,7 +87,7 @@ btnScrollTo.addEventListener("click", function (e) {
   //MODERN way
   section1.scrollIntoView({ behavior: "smooth" }); // does't work with older browsers
 });
-
+*/
 //How the DOM is really works
 
 // - Interact with the browser
