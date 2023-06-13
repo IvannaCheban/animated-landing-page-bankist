@@ -56,6 +56,76 @@ btnScrollTo.addEventListener("click", function () {
   const s1Coord = section1.getBoundingClientRect();
   section1.scrollIntoView({ behavior: "smooth" });
 });
+// Implementing page naviagation smooth scroling
+
+// 1)add event listener to a common parrent of all the elements that we are interested in
+//2)Determin what parent originated that event, so we can then work with that element
+document.querySelector(".nav__links").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  //Matching strategy (ignore strategy to avoid events that happen NOT on the links)
+
+  if (e.target.classList.contains("nav__link")) {
+    console.log("Link");
+    const id = e.target.getAttribute("href");
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// Implementing page naviagation smooth scroling (NOT effitient way)
+// document.querySelectorAll(".nav__link").forEach(function (e) {
+//   e.addEventListener("click", function (e) {
+//     e.preventDefault();
+
+//     const id = this.getAttribute("href"); //selection local html value of each nav link
+
+//     document.querySelector(id).scrollIntoView({ behavior: "smooth" }); //getting the selector from each element to use it at  the same time
+//   }); // not effitient way
+// });
+//Event delegation, Implementing page naviagation
+
+/*
+//Event propagation in practice
+
+// rgb(255,255,255)
+//random number genearator
+const randomInt = (min, max) => Math.floor(Math.random() * max - min + 1) + min;
+
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+console.log(randomColor(0, 255));
+
+document.querySelector(".nav__link").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log("Link", e.target, e.currentTarget);
+  // stop event propagation
+  // e.stopPropagation();
+});
+document.querySelector(".nav__links").addEventListener("click", function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log("Container", e.target, e.currentTarget);
+});
+document.querySelector(".nav").addEventListener(
+  "click",
+  function (e) {
+    this.style.backgroundColor = randomColor();
+
+    console.log("Nav", e.target, e.currentTarget);
+  }
+  // true //here we set 3rd event listener parameter(UseCapture parameter) to true event handler will not listen to the bubbling events but to capturing events
+);
+
+//Even PROPAGATION: bubling and capturing theory
+
+//JS events have a very important property: capturing phase and bubling phase
+//capturing phase is  the process of event traveling from the root(Document) to the target elemet throught all of the parent elements of the target element
+//when it reached the target the target phase begins where events can be handled right at the target, and we do that with different event listeners
+//as soon as event occurs it runs the attached callback function
+
+//after reaching the target event travels back to the root in the so called bublling phase we say that event bubled up to the document root throught all the parents elements, basicaly its as if this event happend in each of the parent element, if we would assing the element to section we would have handled the exact same event twice, once at it's target and once at its parent element, this behavior allows us to implement really powerfull patterns
+// by default events can only be handled at target and bubling phase, but we can also set it to listen to events in the capturing phase instead
+//
 
 /*
 //Implementing smooth scroling theory
@@ -256,14 +326,4 @@ h1.addEventListener("mouseenter", alertH1);
 // <h1 onclick= "alert('HTML alert')">
 //very old
 */
-//
-//Even PROPAGATION: bubling and capturing
-
-//JS events have a very important property: capturing phase and bubling phase
-//capturing phase is  the process of event traveling from the rood(Document) to the target elemet throught all of the parent elements of the target element
-//when it reached the target the target phase begins where events can be handled right at the target, and we do that with different event listeners
-//as soon as event occurs it runs the attached callback function
-
-//after reaching the target event travels back to the root in the so called bublling phase we say that event bubled up to the document root throught all the parents elements, basicaly its as if this event happend in each of the parent element, if we would assing the element to section we would have handled the exact same event twice, once at it's target and once at its parent element, this behavior allows us to implement really powerfull patterns
-// by default events can only be handled at target and bubling phase, but we can also set it to listen to events in the capturing phase instead
 //
