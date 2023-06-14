@@ -71,6 +71,68 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
   }
 });
+//Dom Traversing fundamentals
+const h1 = document.querySelector("h1");
+
+//going downwards: child
+
+console.log(h1.querySelectorAll(".highlight")); //works even if its not direct children of h1, but it supposed to be relative
+console.log(h1.childNodes);
+console.log(h1.children); //live collection
+console.log((h1.firstElementChild.style.color = "white"));
+console.log((h1.lastElementChild.style.color = "orangered"));
+
+//Going upwards:parrents
+console.log(h1.parentNode); //direct parent
+console.log(h1.parentElement);
+h1.closest(".header").style.background = "var(--gradient-secondary)"; //choosing the closest parent to header element// opposite of quarySelector - quary selector looks for kids and closest for ancestors(parents)
+h1.closest("h1").style.background = "var(--gradient-primary)"; //if there are no h1 elements in parenting list the closest method will return the element itself
+
+//Going sideways(siblings) we can go only to previous and the next one
+
+console.log(h1.previousElementSibling); //null because ithere are no h1 elements before this one
+
+console.log(h1.nextElementSibling);
+
+//for nodes
+
+console.log(h1.previousSibling);
+
+console.log(h1.nextSibling);
+
+// moving up to an element and reading children form there
+console.log(h1.parentElement.children);
+
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) el.style.transform = "scale(0.5)";
+});
+
+//Building a tabbed component
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+//adding event handlers to buttons
+tabsContainer.addEventListener(
+  "click",
+  function (e /*to know which button was clicked*/) {
+    const clicked = e.target.closest(".operations__tab"); //its finding the closest parrent with its classname
+
+    //Guard clause
+    if (!clicked) return; //modern way
+
+    //Active tab
+    tabs.forEach((t) => t.classList.remove("operations__tab--active")); // removing the class before its added from any other tab
+    clicked.classList.add("operations__tab--active");
+
+    //Activate content area
+    tabsContent.forEach((c) =>
+      c.classList.remove("operations__content--active")
+    ); //removing the class before its added
+    document
+      .querySelector(`.operations__content--${clicked.dataset.tab}`)
+      .classList.add("operations__content--active");
+  }
+);
 
 // Implementing page naviagation smooth scroling (NOT effitient way)
 // document.querySelectorAll(".nav__link").forEach(function (e) {
