@@ -7,6 +7,12 @@ const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
+const nav = document.querySelector(".nav");
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+const header = document.querySelector(".header");
+const message = document.createElement("div");
 
 const openModal = function (e) {
   e.preventDefault();
@@ -28,8 +34,7 @@ document.addEventListener("keydown", function (e) {
     closeModal();
   }
 });
-const header = document.querySelector(".header");
-const message = document.createElement("div");
+
 message.classList.add("cookie-message");
 
 message.innerHTML =
@@ -71,6 +76,92 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
   }
 });
+//Passing arguments to EventHandlers
+
+//Building a tabbed component
+
+//adding event handlers to buttons
+tabsContainer.addEventListener(
+  "click",
+  function (e /*to know which button was clicked*/) {
+    const clicked = e.target.closest(".operations__tab"); //its finding the closest parrent with its classname
+
+    //Guard clause
+    if (!clicked) return; //modern way
+
+    //Active tab
+    tabs.forEach((t) => t.classList.remove("operations__tab--active")); // removing the class before its added from any other tab
+    clicked.classList.add("operations__tab--active");
+
+    //Activate content area
+    tabsContent.forEach((c) =>
+      c.classList.remove("operations__content--active")
+    ); //removing the class before its added
+    document
+      .querySelector(`.operations__content--${clicked.dataset.tab}`)
+      .classList.add("operations__content--active");
+  }
+);
+
+//Passing arguments to event handlers
+//mouseEnter does not bubble
+const handleHover = function (e) {
+  console.log(this);
+  if (e.target.classList.contains("nav__link")) {
+    const link = e.target;
+    const siblings = link.closest(".nav").querySelectorAll(".nav__link"); //best practise - moving up to closest parent at then from there selecting what we want
+    const logo = link.closest(".nav").querySelector("img");
+    siblings.forEach((el) => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+//passing 'an argument' into handler, using the this keyword as an addtional value
+nav.addEventListener(
+  "mouseover",
+  handleHover.bind(0.5) /*function (e) {
+  if (e.target.classList.contains("nav__link")) {
+    const link = e.target;
+    const siblings = link.closest(".nav").querySelectorAll(".nav__link"); //best practise - moving up to closest parent at then from there selecting what we want
+    const logo = link.closest(".nav").querySelector("img");
+    siblings.forEach((el) => {
+      if (el !== link) el.style.opacity = 0.5;
+    });
+    logo.style.opacity = 0.5;
+  }
+}*/
+);
+
+nav.addEventListener(
+  "mouseout",
+  handleHover.bind(1) // The bind method creates a new function that, when called, has its this keyword set to the provided value.
+  /*function (e, opacity) {
+  if (e.target.classList.contains("nav__link")) {
+    const link = e.target;
+    const siblings = link.closest(".nav").querySelectorAll(".nav__link"); //best practise - moving up to closest parent at then from there selecting what we want
+    const logo = link.closest(".nav").querySelector("img");
+    siblings.forEach((el) => {
+      if (el !== link) el.style.opacity = 1;
+    });
+    logo.style.opacity = 1;
+  }
+}*/
+);
+
+//Implementing sticky Navigation: The scroll Event
+
+//To make navigation stiky we need to add class="nav stiky with position fixed and background color with opacity 0.9"
+const initialCords = section1.getBoundingClientRect();
+
+window.addEventListener("scroll", function (e) {
+  //scroll event is not really eficient and should be avoided, it fires all the time no matter how small the change is
+  if (window.scrollY > initialCords.top) nav.classList.add("sticky");
+  else nav.classList.remove("sticky");
+});
+
+/*
 //Dom Traversing fundamentals
 const h1 = document.querySelector("h1");
 
@@ -106,34 +197,7 @@ console.log(h1.parentElement.children);
 [...h1.parentElement.children].forEach(function (el) {
   if (el !== h1) el.style.transform = "scale(0.5)";
 });
-
-//Building a tabbed component
-const tabs = document.querySelectorAll(".operations__tab");
-const tabsContainer = document.querySelector(".operations__tab-container");
-const tabsContent = document.querySelectorAll(".operations__content");
-//adding event handlers to buttons
-tabsContainer.addEventListener(
-  "click",
-  function (e /*to know which button was clicked*/) {
-    const clicked = e.target.closest(".operations__tab"); //its finding the closest parrent with its classname
-
-    //Guard clause
-    if (!clicked) return; //modern way
-
-    //Active tab
-    tabs.forEach((t) => t.classList.remove("operations__tab--active")); // removing the class before its added from any other tab
-    clicked.classList.add("operations__tab--active");
-
-    //Activate content area
-    tabsContent.forEach((c) =>
-      c.classList.remove("operations__content--active")
-    ); //removing the class before its added
-    document
-      .querySelector(`.operations__content--${clicked.dataset.tab}`)
-      .classList.add("operations__content--active");
-  }
-);
-
+*/
 // Implementing page naviagation smooth scroling (NOT effitient way)
 // document.querySelectorAll(".nav__link").forEach(function (e) {
 //   e.addEventListener("click", function (e) {
