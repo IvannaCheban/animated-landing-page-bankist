@@ -106,7 +106,6 @@ tabsContainer.addEventListener(
 //Passing arguments to event handlers
 //mouseEnter does not bubble
 const handleHover = function (e) {
-  console.log(this);
   if (e.target.classList.contains("nav__link")) {
     const link = e.target;
     const siblings = link.closest(".nav").querySelectorAll(".nav__link"); //best practise - moving up to closest parent at then from there selecting what we want
@@ -153,12 +152,69 @@ nav.addEventListener(
 //Implementing sticky Navigation: The scroll Event
 
 //To make navigation stiky we need to add class="nav stiky with position fixed and background color with opacity 0.9"
+/*
 const initialCords = section1.getBoundingClientRect();
 
 window.addEventListener("scroll", function (e) {
   //scroll event is not really eficient and should be avoided, it fires all the time no matter how small the change is
   if (window.scrollY > initialCords.top) nav.classList.add("sticky");
   else nav.classList.remove("sticky");
+});
+*/
+// //A better way to implement a sticky navigation
+// //The intersection observer API
+// // firt we have to create new IntersectionObserver, it accepts 2 values: callback function and observer options object. Store this observer as a variable and then call the element that serves as a starting point for observer
+
+// //entries arg is an aray of the threshold entries
+// const obsCallback = function (entries, observer) {
+//   entries.forEach((entry) => {
+//     console.log(entry); // intersection ratio is the treshold that we defined in options
+//   });
+// };
+
+// const obsOptions = {
+//   root: null, //element that he want our target to intersect//if its null it will intersect entire view port
+//   threshold: [0, 0.2], //persentage of interseciton at which observer callback will be called
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+
+// observer.observe(section1); // whenever Intersection observer observes the section in specified threshold callback function is fireing
+const navHeight = nav.getBoundingClientRect().height; // not passing but calling a value
+
+const stickyNav = function (entries) {
+  const [entry] = entries; //entries[0]
+  if (!entry.isIntersecting) nav.classList.add("sticky");
+  else nav.classList.remove("sticky");
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0, // if 0% of header is visible
+  rootMargin: `${navHeight}px`, //box of 90 pixsels that will be applied to outside of the traget element
+});
+headerObserver.observe(header);
+
+//Revealing sections on scroll
+
+const allSections = document.querySelectorAll(".section");
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries; // destructuring
+  console.log(entry);
+  if (!entry.isIntersecting) return; // guard clause
+
+  entry.target.classList.remove("section--hidden");
+  observer.unobserve(entry.target); // stoping the observation as the page loaded
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add("section--hidden");
 });
 
 /*
