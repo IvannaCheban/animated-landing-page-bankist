@@ -84,7 +84,7 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
 tabsContainer.addEventListener(
   "click",
   function (e /*to know which button was clicked*/) {
-    const clicked = e.target.closest(".operations__tab"); //its finding the closest parrent with its classname
+    const clicked = e.target.closest(".operations__tab"); //its finding the closest parent with its classname
 
     //Guard clause
     if (!clicked) return; //modern way
@@ -201,7 +201,6 @@ const allSections = document.querySelectorAll(".section");
 
 const revealSection = function (entries, observer) {
   const [entry] = entries; // destructuring
-  console.log(entry);
   if (!entry.isIntersecting) return; // guard clause
 
   entry.target.classList.remove("section--hidden");
@@ -214,8 +213,32 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 });
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
-  section.classList.add("section--hidden");
+  // section.classList.add("section--hidden");
 });
+
+//lazy loading images
+
+// this is needed to optimize the performance
+
+const imgTargets = document.querySelectorAll("img[data-src]");
+const loadImage = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  //Replace the source attribute with data-source
+  entry.target.src = entry.target.dataset.src; // this happens behid the scenes
+  entry.target.addEventListener("load", function () {
+    entry.target.classList.remove("lazy-img");
+  }); //adding an event listener to remove class lazy-img only when the load of the image is finished otherwise it will be cringy on the low internet speed
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImage, {
+  root: null,
+  threshold: 0,
+  rootMargin: "200px", //make the image start loading before the threshold is actually reached
+});
+imgTargets.forEach((img) => imgObserver.observe(img));
+//
 
 /*
 //Dom Traversing fundamentals
@@ -509,3 +532,26 @@ h1.addEventListener("mouseenter", alertH1);
 //very old
 */
 //
+// Lifecycle DOM Events
+
+//DOM content loaded - fired as HTML is downloaded and converted to DPM tree(parced) all scripst must be downloaded and executed before this;
+
+document.addEventListener("DOMContentLoaded", function (e) {
+  console.log("HTML parced and DOM tree built", e);
+});
+
+//The load even
+//not only when the load event happpend but also when all files and external resources
+
+window.addEventListener("load", function (e) {
+  console.log("page fully loaded", e);
+}); //
+
+// window.addEventListener("beforeunload", function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = "message";
+// });
+
+//defer and async loading
+//defer is the best solution
